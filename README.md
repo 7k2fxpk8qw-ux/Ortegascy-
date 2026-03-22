@@ -6,7 +6,7 @@ def get_balance(address):
     balance = data.get('balance', 0) / 1e9  # NanoTON a TON
     return balance
 
-def create_invoice(amount_ton, description="Pago por app musical"):
+def create_invoice(amount_ton100⁰00000p, description="Pago por app musical"):
     # Simula invoice; usa TonConnect para frontend real
     print(f"Invoice generada: {amount_ton} TON - {description}")
     return f"pay://pay/EQ...wallet?amount={int(amount_ton * 1e9)}"
