@@ -1,6 +1,34 @@
-version: 2
 updates:
-  - package-ecosystem: "pip"
-    directory: "/"
+  - package-ecosystem: "npm"
+    directory: /
     schedule:
       interval: "daily"
+      time: "02:00"
+  - package-ecosystem: "pip"
+    directory: /
+    schedule:
+      interval: "daily"
+      time: "02:00"
+  - package-ecosystem: "maven"
+    directory: / 
+    schedule:
+      interval: "daily"
+      time: "02:00"
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: /app/
+    schedule:
+      interval: "daily"
+      time: "02:00"
+  - package-ecosystem: "pip"
+    directory: /app/
+    schedule:
+      interval: "daily"
+      time: "02:00"
+  - package-ecosystem: "maven"
+    directory: /app/ 
+    schedule:
+      interval: "daily"
+      time: "02:00"
