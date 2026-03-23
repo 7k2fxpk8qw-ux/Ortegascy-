@@ -1,48 +1,78 @@
-# ton_client.py - Versión FINAL y limpia
-import os
-import time
-import logging
-from typing import List, Dict
-import requests
-from dotenv import load_dotenv
+# Ortegascy – Kalshi Prediction Markets API
 
-load_dotenv()
+A FastAPI service that exposes [Kalshi](https://kalshi.com) prediction-market data and trading through a clean REST API.
 
-TON_API_KEY = os.getenv("TON_API_KEY")
-if not TON_API_KEY:
-    raise ValueError("❌ Pon tu TON_API_KEY en el archivo .env")
+## Features
 
-BASE_URL = "https://tonapi.io/v2"
-HEADERS = {"X-API-Key": TON_API_KEY}
+- 📊 **Browse markets & events** – list, filter and inspect prediction markets across news, sports, finance and more
+- 📖 **Order book & trade history** – real-time depth and historical prices for any market
+- 💼 **Account management** – view balances, open positions and fill history
+- 🛒 **Order management** – place, amend and cancel limit/market orders
+- 🔐 **RSA-PSS authentication** – Kalshi's signed-request auth model is handled automatically
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
-logger = logging.getLogger("Ortegascy_TON")
+## Quick start
 
-class TonClient:
-    def __init__(self):
-        self.session = requests.Session()
-        self.session.headers.update(HEADERS)
-        logger.info("✅ TonClient listo para Ortegascy 🎵")
+### 1. Clone & install
 
-    def get_balance(self, address: str) -> float:
-        url = f"{BASE_URL}/accounts/{address}"
-        r = self.session.get(url, timeout=10)
-        r.raise_for_status()
-        return int(r.json().get("balance", 0)) / 1_000_000_000
+```bash
+pip install -r requirements.txt
+```
 
-    def create_invoice(self, amount_ton: float, description: str = "Pago Ortegascy"):
-        amount_nano = int(amount_ton * 1_000_000_000)
-        logger.info(f"💰 Invoice creada: {amount_ton} TON - {description}")
-        return f"ton://transfer/EQ...TU_WALLET_AQUI?amount={amount_nano}&text={description}"
+### 2. Configure environment variables
 
-    def check_payments(self, address: str) -> List[Dict]:
-        url = f"{BASE_URL}/accounts/{address}/transactions?limit=20"
-        r = self.session.get(url, timeout=10)
-        r.raise_for_status()
-        return r.json().get("transactions", [])
+Copy the example below to a `.env` file (never commit real secrets):
 
-# Prueba rápida
-if __name__ == "__main__":
-    client = TonClient()
-    direccion = "EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N"  # ejemplo
-    print(f"Balance actual: {client.get_balance(direccion):.4f} TON")
+```dotenv
+# Kalshi trading API base URL (switch to demo for testing)
+KALSHI_API_BASE=https://trading-api.kalshi.com/trade-api/v2
+# KALSHI_API_BASE=https://demo-api.kalshi.co/trade-api/v2   # demo
+
+# Kalshi API credentials (required only for authenticated endpoints)
+KALSHI_API_KEY_ID=your-key-id-here
+KALSHI_PRIVATE_KEY_PATH=/path/to/your/private_key.pem
+```
+
+Public market-data endpoints work without credentials.
+
+### 3. Run
+
+```bash
+uvicorn main:app --reload
+```
+
+Interactive API docs are available at <http://localhost:8000/docs>.
+
+## API overview
+
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| GET | `/` | – | Health check |
+| GET | `/markets` | – | List markets (supports filtering) |
+| GET | `/markets/{ticker}` | – | Single market details |
+| GET | `/markets/{ticker}/orderbook` | – | Live order book |
+| GET | `/markets/{ticker}/history` | – | Price history |
+| GET | `/markets/{ticker}/trades` | – | Recent trades |
+| GET | `/events` | – | List events |
+| GET | `/events/{event_ticker}` | – | Single event details |
+| GET | `/series` | – | List series |
+| GET | `/series/{series_ticker}` | – | Single series details |
+| GET | `/portfolio/balance` | ✅ | Account balance |
+| GET | `/portfolio/positions` | ✅ | Open positions |
+| GET | `/portfolio/fills` | ✅ | Trade fills |
+| GET | `/portfolio/orders` | ✅ | List orders |
+| POST | `/portfolio/orders` | ✅ | Place an order |
+| GET | `/portfolio/orders/{id}` | ✅ | Order details |
+| DELETE | `/portfolio/orders/{id}` | ✅ | Cancel an order |
+| POST | `/portfolio/orders/{id}/amend` | ✅ | Amend an order |
+
+## Deployment
+
+The `Procfile` is configured for Heroku-style platforms:
+
+```
+web: uvicorn main:app --host 0.0.0.0 --port $PORT
+```
+
+## License
+
+MIT
