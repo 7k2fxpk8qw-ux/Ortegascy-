@@ -1,0 +1,38 @@
+{
+  "name": "ortegascy-ton-app",
+  "version": "1.0.0",
+  "description": "TON Connect React UI App",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/7k2fxpk8qw-ux/Ortegascy-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/7k2fxpk8qw-ux/Ortegascy-/issues"
+  },
+  "homepage": "https://github.com/7k2fxpk8qw-ux/Ortegascy-#readme",
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "typescript": "^5.9.3",
+    "vite": "^8.0.1"
+  },
+  "dependencies": {
+    "@ton/ton": "^15.1.0",
+    "@tonconnect/ui-react": "^2.4.2",
+    "buffer": "^6.0.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}

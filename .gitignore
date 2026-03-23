@@ -20,3 +20,15 @@ rad.json
 *.flf
 #Test results file
 TestResults.xml
+
+# Node.js
+node_modules/
+dist/
+*.local
+
+# Python
+__pycache__/
+*.pyc
+.env
+*.egg-info/
+.venv/
